@@ -25,6 +25,7 @@ executable aoc2023
     Paths_aoc2023
     Day01
     Day02
+    Day03
 
   autogen-modules:
     Paths_aoc2023
@@ -35,7 +36,7 @@ executable aoc2023
     -- , split ^>=0.2.4
     -- -- Package `containers`: Brings maps, sets, trees, graphs, sequences.
     -- , containers ^>=0.7
-    -- -- Package `vector`: Performant, fixed length arrays.
-    -- , vector ^>=0.13.1.0
+    -- Package `vector`: Performant, fixed length arrays.
+    , vector ^>=0.13.1.0
     -- -- Package `mtl`: Monad classes for transformers.
     -- , mtl ^>=2.3.1
