@@ -12,7 +12,7 @@ for ((i = 1; i <= 25; i++)); do
 
     FILE_NAME="src/Day${DAY_NUM}.hs"
     if [ ! -e "${FILE_NAME}" ]; then
-        cp "src/DayXY_template.hs" "${FILE_NAME}"
+        cp "src/Template.hs" "${FILE_NAME}"
         sed -i "s/XY/${DAY_NUM}/g" "${FILE_NAME}"
     fi
 

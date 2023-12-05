@@ -1,8 +1,8 @@
-module Day0x where
+module DayXY where
 
 import Paths_aoc2023 (getDataFileName)
 
-day0x :: IO ()
-day0x = do
-  contents <- init . lines <$> (getDataFileName "day0x.txt" >>= readFile)
-
+dayXY :: IO ()
+dayXY = do
+  contents <- init . lines <$> (getDataFileName "dayXY.txt" >>= readFile)
+  putStrLn $ unlines contents
