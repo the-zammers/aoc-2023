@@ -1,6 +1,7 @@
 module Day04 where
 
 import Paths_aoc2023 (getDataFileName)
+import Data.List (intersect)
 import Data.List.Split (splitOneOf)
 import Data.Bifunctor (first)
 
@@ -18,7 +19,8 @@ format x = ((card!!0, card!!1), 1)
   where card = map (map read . words) $ drop 1 $ splitOneOf ":|" x
 
 solveA :: [(Card, Int)] -> Int
-solveA = sum . map ((`div` 2) . (2 ^) . matches . fst)
+solveA = sum . map (points . matches . fst)
+  where points n = if n > 0 then 2^(n-1) else 0
 
 solveB :: [(Card, Int)] -> Int
 solveB [] = 0
@@ -29,4 +31,4 @@ updateRest [] = [] -- for completness' sake
 updateRest y@((x,c):_) = uncurry (++) $ first (map (fmap (c+))) $ splitAt (matches x) (tail y)
 
 matches :: Card -> Int
-matches (a,b) = length $ filter id $ (==) <$> a <*> b
+matches = length . uncurry intersect
