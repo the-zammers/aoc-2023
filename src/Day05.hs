@@ -42,7 +42,7 @@ solveA :: [Integer] -> [[(Integer, Integer, Integer)]] -> Integer
 solveA seeds maps = minimum $ foldr (<$>) seeds (reverse $ map myMap maps)
 
 solveB :: [(Integer, Integer)] -> [[(Integer, Integer, Integer)]] -> Integer
-solveB seeds maps = solveA [solveA [head $ filter (isIn seeds) $ foldr (<$>) [0..] (reverse $ map reverseMap maps)] maps] maps
+solveB seeds maps = solveA [head $ filter (isIn seeds) $ foldr (<$>) [0..] (map reverseMap maps)] maps
 
 isIn :: [(Integer, Integer)] -> Integer -> Bool
 isIn [] _ = False
