@@ -1,7 +1,7 @@
 module Day04 where
 
 import Paths_aoc2023 (getDataFileName)
-import Data.List (intersect)
+import Data.List (intersect, inits)
 import Data.List.Split (splitOneOf)
 import Data.Bifunctor (first)
 
@@ -9,10 +9,11 @@ type Card = ([Int], [Int])
 
 day04 :: IO ()
 day04 = do
-  contents <- init . lines <$> (getDataFileName "day04.txt" >>= readFile)
+  contents <- init . lines <$> (getDataFileName "temp.txt" >>= readFile)
   let formatted = map format contents
   print $ solveA formatted
   print $ solveB formatted
+  print $ map (solveA) $ inits formatted
 
 format :: String -> (Card, Int)
 format x = ((card!!0, card!!1), 1)

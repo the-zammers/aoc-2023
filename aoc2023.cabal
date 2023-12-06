@@ -62,3 +62,5 @@ executable aoc2023
     , vector ^>=0.13.1.0
     -- -- Package `mtl`: Monad classes for transformers.
     -- , mtl ^>=2.3.1
+    , finite-typelits ^>=0.1.6.0
+    , extra ^>=1.7.14
