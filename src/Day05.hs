@@ -2,50 +2,36 @@ module Day05 where
 
 import Paths_aoc2023 (getDataFileName)
 import Data.List.Split (splitOn, chunksOf)
---import qualified Data.Finite as F
-import Data.Foldable (asum)
+import Data.Ix (inRange)
+import Data.Tuple (swap)
 
+type Range = (Integer, Integer)
 
 day05 :: IO ()
 day05 = do
   contents <- init . lines <$> (getDataFileName "day05.txt" >>= readFile)
-  --putStrLn $ unlines contents
-  print $ solveA (getSeedsA contents) (formatA contents)
-  print $ solveB (getSeedsB contents) (formatA contents)
+  print $ solveA (getSeedsA contents) (format contents)
+  print $ solveB (getSeedsB contents) (format contents)
 
 getSeedsA :: [String] -> [Integer]
 getSeedsA x = map read $ drop 1 $ words $ head x
 
-getSeedsB :: [String] -> [(Integer, Integer)]
-getSeedsB x = map (\[a,b]->(a,b)) $ chunksOf 2 $ getSeedsA x
+getSeedsB :: [String] -> [Range]
+getSeedsB x = map (\[a,b]->(a,a+b-1)) $ chunksOf 2 $ getSeedsA x
 
-formatA :: [String] -> [[(Integer, Integer, Integer)]]
-formatA x = extractedMaps
+format :: [String] -> [[(Range, Range)]]
+format x = map (map ((\[a,b,c]->((a,a+c-1),(b,b+c-1))) . map read . words) . tail) blocked
   where blocked = splitOn [""] $ drop 2 x
-        extractedMaps = map (map ((\[a,b,c]->(a,b,c)) . map read . words) . tail) blocked
 
-myMap :: [(Integer, Integer, Integer)] -> (Integer -> Integer)
-myMap xs a = maybe a id (asum $ map (($ a) . myMap') xs)
+forwardMap, reverseMap :: [[(Range, Range)]] -> Integer -> Integer
+forwardMap = foldr1 (.) . reverse . map  functify
+reverseMap = foldr1 (.) .           map (functify . map swap)
 
-myMap' :: (Integer, Integer, Integer) -> (Integer -> Maybe Integer)
-myMap' (dest, src, len) a | src<=a && a<=src+len-1 = Just $ a - src + dest
-myMap' _ _ = Nothing
+functify :: [(Range, Range)] -> (Integer -> Integer)
+functify xs a = foldr (\(dest,src) -> if inRange src a then const (a - (fst src) + (fst dest)) else id) a xs 
 
-reverseMap :: [(Integer, Integer, Integer)] -> (Integer -> Integer)
-reverseMap xs a = maybe a id (asum $ map (($ a) . reverseMap') xs)
+solveA :: [Integer] -> [[(Range, Range)]] -> Integer
+solveA seeds maps = minimum $ forwardMap maps <$> seeds
 
-reverseMap' :: (Integer, Integer, Integer) -> (Integer -> Maybe Integer)
-reverseMap' (src, dest, len) a | src<=a && a<=src+len-1 = Just $ a - src + dest
-reverseMap' _ _ = Nothing
-
-solveA :: [Integer] -> [[(Integer, Integer, Integer)]] -> Integer
-solveA seeds maps = minimum $ foldr (<$>) seeds (reverse $ map myMap maps)
-
-solveB :: [(Integer, Integer)] -> [[(Integer, Integer, Integer)]] -> Integer
-solveB seeds maps = solveA [head $ filter (isIn seeds) $ foldr (<$>) [0..] (map reverseMap maps)] maps
-
-isIn :: [(Integer, Integer)] -> Integer -> Bool
-isIn [] _ = False
-isIn ((a,b):rest) x
-  | a<=x && x<=a+b-1 = True
-  | otherwise = isIn rest x
+solveB :: [(Integer, Integer)] -> [[(Range, Range)]] -> Integer
+solveB seeds maps = fst $ head $ filter (flip any seeds . flip inRange . snd) $ (\f x -> (x, f x)) (reverseMap maps) <$> [0..]
