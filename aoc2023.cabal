@@ -23,6 +23,7 @@ executable aoc2023
   -- Modules included in this executable, other than Main.
   other-modules:
     Paths_aoc2023
+    ZArray
     Day01
     Day02
     Day03
