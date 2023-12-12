@@ -23,7 +23,6 @@ executable aoc2023
   -- Modules included in this executable, other than Main.
   other-modules:
     Paths_aoc2023
-    ZArray
     Day01
     Day02
     Day03
@@ -65,3 +64,4 @@ executable aoc2023
     -- , mtl ^>=2.3.1
     , finite-typelits ^>=0.1.6.0
     , extra ^>=1.7.14
+    , array ^>=0.5.4.0
