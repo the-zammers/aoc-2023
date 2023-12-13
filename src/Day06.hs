@@ -1,7 +1,6 @@
 module Day06 where
 
 import Paths_aoc2023 (getDataFileName)
-import Data.Tuple.Extra (both)
 import Data.Char (isDigit)
 
 day06 :: IO ()
@@ -21,3 +20,6 @@ solve :: (Floating a, RealFrac a) => [(a,a)] -> Int
 solve = product . map one
   where one (t, d) = let discrim = sqrt (t**2 - 4*d) / 2 in 
                      ceiling (t/2 + discrim) - floor (t/2 - discrim) - 1
+                     
+both :: (a -> b) -> (a,a) -> (b,b)
+both f (x,y) = (f x, f y)
